@@ -2,16 +2,16 @@ const browser = chrome || browser;
 const baseURL = 'https://www.reddit.com';
 const autocompleteAPI = 'search_reddit_names';
 
-async function getSubredditSuggestions(text) {
+async function getSubredditSuggestions(subreddit) {
   let isExact = false;
 
-  if (text[0] === '!') {
-    text = text.substring(1);
+  if (subreddit[0] === '!') {
+    subreddit = subreddit.substring(1);
     isExact = true;
   }
 
-  if (text[0] === '"' && text[text.length - 1] === '"') {
-    text = text.substring(1, text.length - 1);
+  if (subreddit[0] === '"' && subreddit[subreddit.length - 1] === '"') {
+    subreddit = subreddit.substring(1, subreddit.length - 1);
     isExact = true;
   }
 
@@ -23,7 +23,7 @@ async function getSubredditSuggestions(text) {
 
   const params = Object.keys(options).reduce(
     (accumulator, key) => `${accumulator}&${key}=${options[key]}`,
-    `query=${text}`
+    `query=${subreddit}`
   );
 
   const response = await fetch(`${baseURL}/api/${autocompleteAPI}.json?${params}`);
@@ -40,20 +40,22 @@ browser.omnibox.setDefaultSuggestion({
 });
 
 browser.omnibox.onInputChanged.addListener(async (text, addSuggestions) => {
-  addSuggestions(await getSubredditSuggestions(text));
+  addSuggestions(await getSubredditSuggestions(text.trim()));
 });
 
 browser.omnibox.onInputEntered.addListener((url, disposition) => {
-  const subredditURL = `${baseURL}/r/${url}/`;
+  const subreddit = url.trim();
+  const actionUrl = !subreddit ? baseURL : `${baseURL}/r/${subreddit}/`;
+
   switch (disposition) {
     case 'currentTab':
-      browser.tabs.update({ url: subredditURL });
+      browser.tabs.update({ url: actionUrl });
       break;
     case 'newForegroundTab':
-      browser.tabs.create({ url: subredditURL });
+      browser.tabs.create({ url: actionUrl });
       break;
     case 'newBackgroundTab':
-      browser.tabs.create({ url: subredditURL, active: false });
+      browser.tabs.create({ url: actionUrl, active: false });
       break;
   }
 });

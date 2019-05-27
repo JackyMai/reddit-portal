@@ -46,16 +46,5 @@ browser.omnibox.onInputChanged.addListener(async (text, addSuggestions) => {
 browser.omnibox.onInputEntered.addListener((url, disposition) => {
   const subreddit = url.trim();
   const actionUrl = !subreddit ? baseURL : `${baseURL}/r/${subreddit}/`;
-
-  switch (disposition) {
-    case 'currentTab':
-      browser.tabs.update({ url: actionUrl });
-      break;
-    case 'newForegroundTab':
-      browser.tabs.create({ url: actionUrl });
-      break;
-    case 'newBackgroundTab':
-      browser.tabs.create({ url: actionUrl, active: false });
-      break;
-  }
+  browser.tabs.update({ url: actionUrl });
 });

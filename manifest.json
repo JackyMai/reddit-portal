@@ -7,7 +7,7 @@
 
   "icons": {},
 
-  "permissions": ["tabs"],
+  "permissions": ["activeTab"],
 
   "background": {
     "scripts": ["main.js"]

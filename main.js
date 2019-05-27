@@ -3,20 +3,8 @@ const baseURL = 'https://www.reddit.com';
 const autocompleteAPI = 'search_reddit_names';
 
 async function getSubredditSuggestions(subreddit) {
-  let isExact = false;
-
-  if (subreddit[0] === '!') {
-    subreddit = subreddit.substring(1);
-    isExact = true;
-  }
-
-  if (subreddit[0] === '"' && subreddit[subreddit.length - 1] === '"') {
-    subreddit = subreddit.substring(1, subreddit.length - 1);
-    isExact = true;
-  }
-
   const options = {
-    exact: isExact,
+    exact: false,
     include_over_18: false,
     include_advertisable: false
   };
@@ -35,9 +23,7 @@ async function getSubredditSuggestions(subreddit) {
   }));
 }
 
-browser.omnibox.setDefaultSuggestion({
-  description: 'Enter the name of a subreddit'
-});
+browser.omnibox.setDefaultSuggestion({ description: 'Enter the name of a subreddit' });
 
 browser.omnibox.onInputChanged.addListener(async (text, addSuggestions) => {
   addSuggestions(await getSubredditSuggestions(text.trim()));

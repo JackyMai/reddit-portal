@@ -3,7 +3,7 @@
   "name": "Reddit Portal",
   "version": "1.0",
 
-  "description": "A simple shortcut to Reddit communities by typing \"r/\" in the browser URL",
+  "description": "A simple shortcut to Reddit communities by typing \"r/ {subreddit}\" in the address bar.",
 
   "icons": {
     "48": "icons/48.png"

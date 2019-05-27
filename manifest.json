@@ -5,7 +5,9 @@
 
   "description": "A simple shortcut to Reddit communities by typing \"r/\" in the browser URL",
 
-  "icons": {},
+  "icons": {
+    "48": "icons/48.png"
+  },
 
   "permissions": ["activeTab"],
 
